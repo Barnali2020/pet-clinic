@@ -1,2 +1,2 @@
-# PetClinic
+# pet-clinic
 Pet clinic project
