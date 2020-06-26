@@ -1,0 +1,5 @@
+com/barnali/petclinic/model/Person.class
+com/barnali/petclinic/model/Owner.class
+com/barnali/petclinic/model/Vet.class
+com/barnali/petclinic/model/PetType.class
+com/barnali/petclinic/model/Pet.class
