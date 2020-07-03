@@ -1,10 +1,11 @@
 package com.barnali.petclinic.services.map;
 
 import com.barnali.petclinic.model.Vet;
-import com.barnali.petclinic.services.CrudService;
+import com.barnali.petclinic.services.VetService;
+
 import java.util.Set;
 
-public class VetServiceMap extends AbstractMapService<Vet, Long> implements CrudService<Vet, Long> {
+public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
 
     @Override
     public Set<Vet> findAll() {
