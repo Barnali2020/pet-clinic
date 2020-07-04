@@ -3,11 +3,7 @@ package com.barnali.petclinic.bootstrap;
 import com.barnali.petclinic.model.Owner;
 import com.barnali.petclinic.model.Vet;
 import com.barnali.petclinic.services.OwnerService;
-import com.barnali.petclinic.services.PetService;
 import com.barnali.petclinic.services.VetService;
-import com.barnali.petclinic.services.map.OwnerServiceMap;
-import com.barnali.petclinic.services.map.PetServiceMap;
-import com.barnali.petclinic.services.map.VetServiceMap;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +13,9 @@ public class DataLoader implements CommandLineRunner {
     private OwnerService ownerService;
     private VetService vetService;
 
-    public DataLoader(){
-        this.ownerService = new OwnerServiceMap();
-        this.vetService = new VetServiceMap();
+    public DataLoader(OwnerService ownerService, VetService vetService){
+        this.ownerService = ownerService;
+        this.vetService = vetService;
     }
 
     @Override
