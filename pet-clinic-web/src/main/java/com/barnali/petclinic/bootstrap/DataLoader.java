@@ -1,13 +1,7 @@
 package com.barnali.petclinic.bootstrap;
 
-import com.barnali.petclinic.model.Owner;
-import com.barnali.petclinic.model.Pet;
-import com.barnali.petclinic.model.PetType;
-import com.barnali.petclinic.model.Vet;
-import com.barnali.petclinic.services.OwnerService;
-import com.barnali.petclinic.services.PetService;
-import com.barnali.petclinic.services.PetTypeService;
-import com.barnali.petclinic.services.VetService;
+import com.barnali.petclinic.model.*;
+import com.barnali.petclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +13,13 @@ public class DataLoader implements CommandLineRunner {
     private OwnerService ownerService;
     private VetService vetService;
     private PetTypeService petTypeService;
+    private SpecialityService specialityService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService){
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService){
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.specialityService = specialityService;
     }
 
     @Override
@@ -77,16 +73,29 @@ public class DataLoader implements CommandLineRunner {
 
         ownerService.save(owner2);
 
-        //======================== Vets ====================
+        //======================== Vets and Speciality====================
+
+        Speciality radiologySpeciality = new Speciality();
+        radiologySpeciality.setName("Radiology");
+
+        Speciality surgerySpeciality = new Speciality();
+        surgerySpeciality.setName("Surgery");
+
+        Speciality dentistrySpeciality = new Speciality();
+        dentistrySpeciality.setName("Dentistry");
+
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
         vet1.setLastName("Axe");
+        vet1.getSpecialities().add(radiologySpeciality);
+        vet1.getSpecialities().add(surgerySpeciality);
 
         vetService.save(vet1);
 
         Vet vet2 = new Vet();
         vet2.setFirstName("Jessei");
         vet2.setLastName("Porter");
+        vet2.getSpecialities().add(dentistrySpeciality);
 
         vetService.save(vet2);
     }
