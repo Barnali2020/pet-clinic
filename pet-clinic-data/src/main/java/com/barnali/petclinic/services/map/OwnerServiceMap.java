@@ -1,13 +1,27 @@
 package com.barnali.petclinic.services.map;
 
 import com.barnali.petclinic.model.Owner;
+import com.barnali.petclinic.model.Pet;
+import com.barnali.petclinic.model.PetType;
 import com.barnali.petclinic.services.OwnerService;
+import com.barnali.petclinic.services.PetService;
+import com.barnali.petclinic.services.PetTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+
+    private PetTypeService petTypeService;
+    private PetService petService;
+
+    @Autowired
+    public OwnerServiceMap(PetTypeService petTypeService, PetService petService) {
+        this.petTypeService = petTypeService;
+        this.petService = petService;
+    }
 
     @Override
     public Owner findByLastName(String lastName) {
@@ -26,7 +40,25 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
 
     @Override
     public Owner save(Owner object) {
-        return super.save(object);
+        if(object != null) {
+            if(object.getPets() != null){
+                object.getPets().forEach(pet -> {
+                    if(pet.getPetType().getId() == null){
+                        PetType savedPetType = petTypeService.save(pet.getPetType());
+                        pet.setPetType(savedPetType);
+                    }
+
+                    if(pet.getId() == null){
+                        Pet savedPet= petService.save(pet);
+                        pet.setId(savedPet.getId());
+                    }
+                });
+                return super.save(object);
+            }else{
+                throw new RuntimeException("Owner doesn't have Pets!!");
+            }
+        }
+        return null;
     }
 
     @Override
