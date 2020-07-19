@@ -1,7 +1,5 @@
 package com.barnali.petclinic.services.map;
 
-import com.barnali.petclinic.model.Pet;
-import com.barnali.petclinic.model.PetType;
 import com.barnali.petclinic.model.Visit;
 import com.barnali.petclinic.services.VisitService;
 import org.springframework.stereotype.Service;
