@@ -1,14 +1,21 @@
 package com.barnali.petclinic.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "specialities")
 public class Speciality extends BaseEntity{
 
-    private String name;
+    @Column(name = "description")
+    private String descrition;
 
-    public String getName() {
-        return name;
+    public String getDescrition() {
+        return descrition;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescrition(String descrition) {
+        this.descrition = descrition;
     }
 }
