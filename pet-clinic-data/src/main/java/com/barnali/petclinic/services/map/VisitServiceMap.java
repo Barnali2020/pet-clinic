@@ -2,11 +2,13 @@ package com.barnali.petclinic.services.map;
 
 import com.barnali.petclinic.model.Visit;
 import com.barnali.petclinic.services.VisitService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
+@Profile({"default", "map"})
 public class VisitServiceMap extends AbstractMapService<Visit, Long> implements VisitService {
 
     @Override
