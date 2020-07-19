@@ -22,6 +22,11 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
     }
 
     @Override
+    public Vet findByLastName(String lastName) {
+        return null;
+    }
+
+    @Override
     public Set<Vet> findAll() {
         return super.findAll();
     }
@@ -58,4 +63,6 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
     public void deleteById(Long id) {
         super.deleteById(id);
     }
+
+
 }
