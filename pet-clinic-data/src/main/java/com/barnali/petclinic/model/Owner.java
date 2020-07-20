@@ -1,12 +1,29 @@
 package com.barnali.petclinic.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "owners")
 public class Owner extends Person{
+
+    /** This call is subclass of Person so need to provide explicit constructor **/
+    //@NoArgsConstructor and @AllArgsConstructor allows lombok to create Builder patter
+    @Builder
+    public Owner(Long id, String firstName, String lastName, String address, String city, String telephone,
+                 Set<Pet> pets){
+        super(id, firstName, lastName);
+        this.address = address;
+        this.city = city;
+        this.telephone = telephone;
+        this.pets = pets;
+    }
 
     @Column(name = "address")
     private String address;
@@ -18,39 +35,8 @@ public class Owner extends Person{
     private String telephone;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Pet> pets;
+    private Set<Pet> pets = new HashSet<>();
 
-    public String getAddress() {
-        return address;
-    }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public Set<Pet> getPets() {
-        if(pets == null)
-            pets = new HashSet<>();
-        return pets;
-    }
-
-    public void setPets(Set<Pet> pets) {
-        this.pets = pets;
-    }
 }
