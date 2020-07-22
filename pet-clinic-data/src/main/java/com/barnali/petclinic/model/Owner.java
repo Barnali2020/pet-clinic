@@ -35,8 +35,17 @@ public class Owner extends Person{
     private String telephone;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Pet> pets = new HashSet<>();
+    private Set<Pet> pets;
 
-
+    /**
+     * { private Set<Pet> pets = new HashSet<>();}
+     * Reason for customized getPets() method because above statement will not have any effect for Builder pattern
+     * @return
+     */
+    public Set<Pet> getPets(){
+        if(pets == null)
+            pets = new HashSet<>();
+        return pets;
+    }
 
 }
