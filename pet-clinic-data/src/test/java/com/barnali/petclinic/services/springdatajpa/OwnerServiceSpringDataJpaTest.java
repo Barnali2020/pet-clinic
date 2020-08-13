@@ -8,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +36,19 @@ class OwnerServiceSpringDataJpaTest {
         Owner returnedOwner = ownerServiceSpringDataJpa.findByLastName(expectedLastName);
 
         assertEquals(expectedLastName, returnedOwner.getLastName());
+    }
+
+    @Test
+    void findAllByLastNameLike() {
+        when(ownerRepository.findAllByLastNameLike(anyString())).thenReturn(
+                Arrays.asList(Owner.builder().id(1L).build(),
+                        Owner.builder().id(2L).build())
+        );
+
+        List<Owner> foundOwnerList = ownerServiceSpringDataJpa.findAllByLastNameLike("Bhowmik");
+
+        assertNotNull(foundOwnerList);
+        assertEquals(2, foundOwnerList.size());
     }
 
     @Test
