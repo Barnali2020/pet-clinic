@@ -48,7 +48,7 @@ class OwnerControllerTest {
     }
 
     @Test
-    void findOwners() throws Exception {
+    void getFindOwnersForm() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/find"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"))
@@ -69,7 +69,12 @@ class OwnerControllerTest {
 
     @Test
     void processFindFormReturnNone() throws Exception {
-        //TODO
+        when(ownerService.findAllByLastNameLike(anyString()))
+                .thenReturn(Arrays.asList());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/find/result"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("owners/findOwners"));
     }
 
     @Test
@@ -77,7 +82,7 @@ class OwnerControllerTest {
         when(ownerService.findAllByLastNameLike(anyString()))
                 .thenReturn(Arrays.asList(Owner.builder().id(1L).build()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/owners"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/find/result"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
     }
@@ -88,7 +93,7 @@ class OwnerControllerTest {
         when(ownerService.findAllByLastNameLike(anyString()))
                 .thenReturn(Arrays.asList(Owner.builder().id(1L).build(),Owner.builder().id(2L).build()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/owners"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/find/result"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("owners/ownersList"))
                 .andExpect(MockMvcResultMatchers.model().attribute("selections",hasSize(2)));

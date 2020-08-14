@@ -31,7 +31,7 @@ public class OwnerController {
     }
 
     @GetMapping("/owners/find")
-    public String findOwners(Model model){
+    public String getFindOwnersForm(Model model){
         model.addAttribute("owner", Owner.builder().build());
         return "owners/findOwners";
     }
@@ -43,7 +43,7 @@ public class OwnerController {
         return modelAndView;
     }
 
-    @GetMapping("/owners")
+    @GetMapping("/owners/find/result")
     public String processFindForm(Owner owner, BindingResult result, Model model){
         // allow parameterless GET request for /owners to return all records
         if (owner.getLastName() == null) {
@@ -55,7 +55,7 @@ public class OwnerController {
 
         if (foundOwnerList.isEmpty()) {
             // no owners found
-            result.rejectValue("lastName", "notFound", "Owner with this last name not found");
+            result.rejectValue("lastName", "notFound", "Owner with last name not found");
             return "owners/findOwners";
         } else if (foundOwnerList.size() == 1) {
             // 1 owner found
