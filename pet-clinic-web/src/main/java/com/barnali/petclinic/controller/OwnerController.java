@@ -7,12 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -66,5 +64,40 @@ public class OwnerController {
             model.addAttribute("selections", foundOwnerList);
             return "owners/ownersList";
         }
+    }
+
+    @GetMapping("/owners/new")
+    public String getOwnerCreationForm(Model model){
+        model.addAttribute("owner", Owner.builder().build());
+        return "owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/owners/new")
+    public String createOwner(@Valid Owner owner, BindingResult result, Model model){
+
+        if(result.hasErrors()){
+            return "owners/createOrUpdateOwnerForm";
+        }
+
+        Owner savedOwner = ownerService.save(owner);
+        return "redirect:/owners/"+savedOwner.getId();
+    }
+
+    @GetMapping("/owners/{ownerId}/edit")
+    public String getOwnerUpdateForm(@PathVariable String ownerId, Model model){
+        model.addAttribute("owner", ownerService.findById(Long.valueOf(ownerId)));
+        return "owners/createOrUpdateOwnerForm";
+    }
+
+    @PostMapping("/owners/{ownerId}/edit")
+    public String updateOwner(@Valid Owner owner, BindingResult result, @PathVariable String ownerId){
+
+        if(result.hasErrors()){
+            return "owners/createOrUpdateOwnerForm";
+        }
+
+        owner.setId(Long.valueOf(ownerId));         //id is needed to set because we are using @InitBinder
+        Owner savedOwner = ownerService.save(owner);
+        return "redirect:/owners/"+savedOwner.getId();
     }
 }

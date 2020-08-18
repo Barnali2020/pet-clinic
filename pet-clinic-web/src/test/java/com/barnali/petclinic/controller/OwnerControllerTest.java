@@ -5,6 +5,7 @@ import com.barnali.petclinic.services.OwnerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,8 +20,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerControllerTest {
@@ -99,4 +99,26 @@ class OwnerControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("selections",hasSize(2)));
 
     }
+
+    @Test
+    void testGetOwnerCreationForm() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("owner"))
+                .andExpect(MockMvcResultMatchers.view().name("owners/createOrUpdateOwnerForm"));
+
+        verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void testUpdateOwner() throws Exception {
+        when(ownerService.save(ArgumentMatchers.any(Owner.class))).thenReturn(Owner.builder().id(1L).build());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/edit"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+
+        verify(ownerService, times(1)).save(ArgumentMatchers.any(Owner.class));
+    }
+
 }
