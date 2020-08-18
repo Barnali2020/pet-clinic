@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "owners")
+@Table(name = "owner")
 public class Owner extends Person{
 
     /** This call is subclass of Person so need to provide explicit constructor **/
@@ -22,7 +22,9 @@ public class Owner extends Person{
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.pets = pets;
+        if(pets != null) {
+            this.pets = pets;
+        }
     }
 
     @Column(name = "address")
@@ -35,7 +37,7 @@ public class Owner extends Person{
     private String telephone;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    private Set<Pet> pets;
+    private Set<Pet> pets = new HashSet<>();;
 
     /**
      * { private Set<Pet> pets = new HashSet<>();}
@@ -46,6 +48,36 @@ public class Owner extends Person{
         if(pets == null)
             pets = new HashSet<>();
         return pets;
+    }
+
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name) {
+        return getPet(name, false);
+    }
+
+    /**
+     * Return the Pet with the given name, or null if none found for this Owner.
+     *
+     * @param name to test
+     * @return true if pet name is already in use
+     */
+    public Pet getPet(String name, boolean ignoreNew) {
+        name = name.toLowerCase();
+        for (Pet pet : pets) {
+            if (!ignoreNew || !pet.isNew()) {
+                String compName = pet.getName();
+                compName = compName.toLowerCase();
+                if (compName.equals(name)) {
+                    return pet;
+                }
+            }
+        }
+        return null;
     }
 
 }
