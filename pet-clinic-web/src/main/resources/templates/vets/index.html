@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'vets')}">
 
 <body>
 <h2>Veterinarians</h2>
@@ -7,16 +8,18 @@
 <table id="vets" class="table table-striped">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Name</th>
+        <th>Specialites</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="vet:${vets}">
-        <td th:text="${vet.getId()}">1</td>
-        <td th:text="${vet.getFirstName()}">Sam</td>
-        <td th:text="${vet.getLastName()}">Axe</td>
+        <td th:text="${vet.getFirstName()+' '+vet.getLastName()}">Sam</td>
+        <td>
+            <span th:each="speciality : ${vet.specialities}"
+                  th:text="${speciality.description + '  '}" />
+            <span th:if="${vet?.specialities?.size() == 0}">none</span>
+        </td>
     </tr>
     </tbody>
 </table>
